@@ -9,4 +9,7 @@
 
     <color name="listItem">@color/contentBackground</color>
     <color name="listItemSelected">#C8E6C9</color>
+
+    <color name="emptyViewBackground">#222222</color>
+    <color name="focusCircle">#333333</color>
 </resources>

@@ -82,6 +82,14 @@ class TodolistFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.items.observe(viewLifecycleOwner) {
             itemsAdapter.submitList(it)
+            if (it.isEmpty()) {
+                todolist_view.visibility = View.GONE
+                todolist_empty_view.visibility = View.VISIBLE
+            }
+            else {
+                todolist_view.visibility = View.VISIBLE
+                todolist_empty_view.visibility = View.GONE
+            }
         }
     }
 

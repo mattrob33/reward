@@ -80,6 +80,15 @@ class RewardsFragment : Fragment() {
         viewModel.items.observe(viewLifecycleOwner) {
             itemsAdapter.items = it
             itemsAdapter.notifyDataSetChanged()
+
+            if (it.isEmpty()) {
+                reward_list_view.visibility = View.GONE
+                reward_empty_view.visibility = View.VISIBLE
+            }
+            else {
+                reward_list_view.visibility = View.VISIBLE
+                reward_empty_view.visibility = View.GONE
+            }
         }
 
         viewModel.onRequestPurchase.observe(viewLifecycleOwner, Observer { rewardEvent ->
