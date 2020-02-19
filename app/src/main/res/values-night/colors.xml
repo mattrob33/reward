@@ -7,9 +7,6 @@
     <color name="textColor">#FAFAFA</color>
     <color name="rewardImageColor">#EEEEEE</color>
 
-    <color name="todolistTitle">@color/colorPrimary</color>
-    <color name="todolistTitlePressed">@color/colorPrimaryDark</color>
-
     <color name="listItem">@color/contentBackground</color>
     <color name="listItemSelected">#C8E6C9</color>
 </resources>

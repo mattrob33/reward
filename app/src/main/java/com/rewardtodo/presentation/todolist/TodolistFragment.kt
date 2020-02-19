@@ -2,9 +2,7 @@ package com.rewardtodo.presentation.todolist
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +13,7 @@ import com.rewardtodo.domain.TodoItem
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_todolist.*
 import javax.inject.Inject
+
 
 class TodolistFragment : Fragment() {
 
@@ -31,7 +30,9 @@ class TodolistFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_todolist, container, false)
+        val v = inflater.inflate(R.layout.fragment_todolist, container, false)
+        setHasOptionsMenu(true)
+        return v
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -42,8 +43,26 @@ class TodolistFragment : Fragment() {
         start()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.todolist_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.menu_hide_done).isVisible = true
+        super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.menu_hide_done -> viewModel.toggleHideDone()
+        }
+        return true
+    }
+
     private fun setupView() {
         (activity!! as AppCompatActivity).setSupportActionBar(todolist_toolbar)
+        (activity!! as AppCompatActivity).supportActionBar?.title = ""
 
         todolist_view.layoutManager = LinearLayoutManager(requireContext())
         todolist_view.adapter = itemsAdapter

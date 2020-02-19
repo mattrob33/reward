@@ -22,6 +22,9 @@ class TodolistViewModel (
 
     private var getTodoItemsJob: Job? = null
 
+    private val _hideDone = MutableLiveData<Boolean>()
+    private val hideDone = _hideDone
+
     private val _items = MutableLiveData<List<TodoItemView>>()
     val items = _items
 
@@ -29,15 +32,21 @@ class TodolistViewModel (
         getTodoItemsJob?.cancelIfActive()
 
         getTodoItemsJob = viewModelScope.launch {
-            withContext(Dispatchers.Main) {
-                todoRepository.getAllTodoItems().collect { itemList ->
-                    _items.value = itemList.map { TodoItemMapper.mapToView(it) }.filter { !it.done }
-                }
+            todoRepository.getAllTodoItems().collect { itemList ->
+                var filteredList = itemList.map { TodoItemMapper.mapToView(it) }
+                if (hideDone.value == true)
+                    filteredList = filteredList.filter { !it.done }
+                _items.value = filteredList
             }
         }
     }
 
     fun addTodoItem(newItem: TodoItem): Job {
         return todoRepository.addTodoItem(newItem)
+    }
+
+    fun toggleHideDone() {
+        _hideDone.value = (hideDone.value != true)
+        getTodoItems()
     }
 }
