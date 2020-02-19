@@ -12,13 +12,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.BlendModeColorFilterCompat
-import androidx.core.graphics.BlendModeCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rewardtodo.R
 import com.rewardtodo.RewardApplication
 import com.rewardtodo.data.repo.RewardRepository
 import com.rewardtodo.data.repo.UserRepository
+import com.rewardtodo.domain.Reward
 import com.rewardtodo.domain.User
 import com.rewardtodo.presentation.mapper.RewardMapper
 import com.rewardtodo.presentation.models.RewardView
@@ -27,8 +27,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RewardAdapter @Inject constructor(
-    private val userRepo: UserRepository,
-    private val rewardRepo: RewardRepository
+    private val viewModel: RewardsViewModel,
+    private val userRepo: UserRepository
 ): RecyclerView.Adapter<RewardAdapter.ViewHolder>() {
 
     var items: List<RewardView> = mutableListOf()
@@ -46,11 +46,7 @@ class RewardAdapter @Inject constructor(
 
         holder.row.setOnClickListener {
             val reward = RewardMapper.mapFromView(rewardView)
-            reward.numPurchases++
-            rewardRepo.updateReward(reward)
-
-            user.points -= reward.points
-            userRepo.updateUser(user)
+            attemptRewardPurchase(reward)
         }
 
         holder.image.setImageResource(R.drawable.ic_tags)
@@ -82,6 +78,10 @@ class RewardAdapter @Inject constructor(
 
     override fun getItemCount(): Int {
         return items.size
+    }
+
+    private fun attemptRewardPurchase(reward: Reward) {
+        viewModel.requestPurchase(reward)
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

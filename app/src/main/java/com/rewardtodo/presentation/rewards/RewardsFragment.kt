@@ -9,20 +9,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.rewardtodo.R
+import com.rewardtodo.data.repo.UserRepository
 import com.rewardtodo.domain.Reward
+import com.rewardtodo.domain.User
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_rewards.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RewardsFragment : Fragment() {
 
-    @Inject lateinit var itemsAdapter: RewardAdapter
+    lateinit var itemsAdapter: RewardAdapter
     @Inject lateinit var viewModelFactory: RewardsViewModelFactory
+    @Inject lateinit var userRepo: UserRepository
 
     private val viewModel: RewardsViewModel by lazy {
         ViewModelProvider(activity!!, viewModelFactory)[RewardsViewModel::class.java]
@@ -47,6 +53,8 @@ class RewardsFragment : Fragment() {
 
     private fun setupView() {
         (activity!! as AppCompatActivity).setSupportActionBar(rewards_toolbar)
+
+        itemsAdapter = RewardAdapter(viewModel, userRepo)
 
         reward_list_view.layoutManager = LinearLayoutManager(requireContext())
         reward_list_view.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
@@ -73,9 +81,36 @@ class RewardsFragment : Fragment() {
             itemsAdapter.items = it
             itemsAdapter.notifyDataSetChanged()
         }
+
+        viewModel.onRequestPurchase.observe(viewLifecycleOwner, Observer { rewardEvent ->
+            rewardEvent.getContentIfNotHandled()?.let { reward ->
+                if (reward.points > viewModel.user.points) {
+                    Snackbar.make(rewards_root, "You don't have enough points for this reward yet", Snackbar.LENGTH_SHORT).show()
+                }
+                else {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(reward.title)
+                        .setMessage("Purchase ${reward.title} for ${reward.points} points?")
+                        .setPositiveButton("Purchase") { _, _ ->
+                            viewModel.purchaseReward(reward)
+                            showRewardPurchasedMessage(reward)
+                        }
+                        .setNegativeButton("No", null)
+                        .show()
+                }
+            }
+        })
     }
 
     private fun start() {
         viewModel.getRewards()
+    }
+
+    private fun showRewardPurchasedMessage(reward: Reward) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Hooray!")
+            .setMessage("You earned ${reward.title}! Way to go, you deserve it.")
+            .setPositiveButton("Thanks!", null)
+            .show()
     }
 }

@@ -3,6 +3,7 @@ package com.rewardtodo.presentation.todolist
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rewardtodo.cache.Preferences
 import com.rewardtodo.data.repo.TodoRepository
 import com.rewardtodo.data.repo.UserRepository
 import com.rewardtodo.domain.TodoItem
@@ -14,16 +15,15 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.produceIn
+import javax.inject.Inject
 
 class TodolistViewModel (
     private val userRepository: UserRepository,
-    private val todoRepository: TodoRepository
+    private val todoRepository: TodoRepository,
+    private val preferences: Preferences
 ): ViewModel() {
 
     private var getTodoItemsJob: Job? = null
-
-    private val _hideDone = MutableLiveData<Boolean>()
-    private val hideDone = _hideDone
 
     private val _items = MutableLiveData<List<TodoItemView>>()
     val items = _items
@@ -34,7 +34,7 @@ class TodolistViewModel (
         getTodoItemsJob = viewModelScope.launch {
             todoRepository.getAllTodoItems().collect { itemList ->
                 var filteredList = itemList.map { TodoItemMapper.mapToView(it) }
-                if (hideDone.value == true)
+                if (!preferences.showCompletedTodoItems)
                     filteredList = filteredList.filter { !it.done }
                 _items.value = filteredList
             }
@@ -46,7 +46,7 @@ class TodolistViewModel (
     }
 
     fun toggleHideDone() {
-        _hideDone.value = (hideDone.value != true)
+        preferences.showCompletedTodoItems = !preferences.showCompletedTodoItems
         getTodoItems()
     }
 }

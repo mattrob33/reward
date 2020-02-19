@@ -1,6 +1,7 @@
 package com.rewardtodo.di.module
 
 import android.app.Application
+import android.content.Context
 import com.rewardtodo.cache.db.RewardDao
 import com.rewardtodo.cache.db.RewardDb
 import com.rewardtodo.cache.db.TodoItemDao
@@ -20,7 +21,7 @@ open class ApplicationModule {
 
     @Provides
     @ApplicationScope
-    fun provideContext(application: Application) = application
+    fun provideContext(application: Application): Context = application
 
     @Provides
     @ApplicationScope
