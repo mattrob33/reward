@@ -1,0 +1,23 @@
+<resources>
+
+    <style name="BaseTheme" parent="Theme.MaterialComponents.DayNight">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/toolbarBackground</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme" parent="BaseTheme" />
+
+    <style name="PointsView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="android:paddingStart">6dp</item>
+        <item name="android:paddingEnd">6dp</item>
+        <item name="android:background">@drawable/points_background</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+</resources>

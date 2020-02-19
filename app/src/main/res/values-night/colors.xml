@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="windowBackground">#000000</color>
+    <color name="contentBackground">#070707</color>
+    <color name="toolbarBackground">@color/windowBackground</color>
+
+    <color name="textColor">#FAFAFA</color>
+    <color name="rewardImageColor">#EEEEEE</color>
+
+    <color name="todolistTitle">@color/colorPrimary</color>
+    <color name="todolistTitlePressed">@color/colorPrimaryDark</color>
+
+    <color name="listItem">@color/contentBackground</color>
+    <color name="listItemSelected">#C8E6C9</color>
+</resources>

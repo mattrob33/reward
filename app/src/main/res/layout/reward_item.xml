@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/reward_item_row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:background="@drawable/todo_list_item_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground"
+    android:paddingStart="8dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="8dp">
+
+    <ImageView
+        android:id="@+id/image_reward"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="reward image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_compass" />
+
+    <TextView
+        android:id="@+id/text_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/textColor"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/text_desc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/image_reward"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Wild Oats" />
+
+    <TextView
+        android:id="@+id/text_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/textColor"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/text_points"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/text_title"
+        app:layout_constraintTop_toBottomOf="@+id/text_title"
+        tools:text="You can use those oats to make oatmeal, bread, whatever you want. I don't care. They're your oats." />
+
+    <TextView
+        android:id="@+id/text_points"
+        style="@style/PointsView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/text_title"
+        app:layout_constraintTop_toBottomOf="@id/text_desc"
+        tools:text="100" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
