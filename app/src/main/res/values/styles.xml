@@ -11,13 +11,54 @@
 
     <style name="AppTheme" parent="BaseTheme" />
 
+
     <style name="PointsView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:background">@drawable/points_background</item>
+        <item name="android:elevation">1dp</item>
+
+        <item name="android:gravity">center</item>
         <item name="android:paddingTop">1dp</item>
         <item name="android:paddingBottom">1dp</item>
         <item name="android:paddingStart">6dp</item>
         <item name="android:paddingEnd">6dp</item>
-        <item name="android:background">@drawable/points_background</item>
-        <item name="android:textColor">@color/textColor</item>
+
+        <item name="android:textColor">@color/pointsTextColor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">0.6</item>
+        <item name="android:shadowColor">#CCCCCC</item>
+    </style>
+
+    <style name="EmptyView" />
+
+    <style name="EmptyView.Icon">
+        <item name="android:tint">@color/emptyViewAccent</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:cropToPadding">true</item>
+        <item name="android:padding">20dp</item>
+
+        <item name="android:background">@drawable/circle_outline</item>
+        <item name="android:backgroundTint">@color/emptyViewAccent</item>
+
+        <item name="layout_constraintVertical_bias">0.4</item>
+        <item name="layout_constraintWidth_percent">.3</item>
+        <item name="layout_constraintDimensionRatio">1:1</item>
+    </style>
+
+    <style name="EmptyView.Title">
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/emptyViewAccentDark</item>
+        <item name="layout_constraintDimensionRatio">1:1</item>
+    </style>
+
+    <style name="EmptyView.Message">
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:fontFamily">@font/lato</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/emptyViewAccent</item>
     </style>
 
 </resources>

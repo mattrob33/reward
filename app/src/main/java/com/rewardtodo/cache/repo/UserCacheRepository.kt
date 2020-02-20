@@ -20,17 +20,23 @@ class UserCacheRepository @Inject constructor(private val userDao: UserDao) {
         return userDao.numUsers() > 0
     }
 
-    suspend fun getUser(): User {
+    suspend fun getUser(id: String): User {
         if (hasAddedUser()) {
-            return UserMapper.mapFromEntity( userDao.getUser() )
+            return UserMapper.mapFromEntity( userDao.getUser(id) )
         }
-        val newUser = User()
+        val newUser = User(name = "My Name")
         userDao.insert( UserMapper.mapToEntity(newUser) )
         return newUser
     }
 
-    fun getUserFlow(): Flow<User> = userDao.getUserFlow().map { userEntity ->
+    fun getUserFlow(id: String): Flow<User> = userDao.getUserFlow(id).map { userEntity ->
         UserMapper.mapFromEntity(userEntity)
+    }
+
+    fun getUserListFlow(): Flow<List<User>> = userDao.getUserListFlow().map { entityList ->
+        entityList.map { entity ->
+            UserMapper.mapFromEntity(entity)
+        }
     }
 
 }

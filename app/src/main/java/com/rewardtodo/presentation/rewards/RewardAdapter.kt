@@ -13,33 +13,18 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rewardtodo.R
-import com.rewardtodo.RewardApplication
-import com.rewardtodo.data.repo.RewardRepository
-import com.rewardtodo.data.repo.UserRepository
 import com.rewardtodo.domain.Reward
-import com.rewardtodo.domain.User
+import com.rewardtodo.global.RewardApplication
 import com.rewardtodo.presentation.mapper.RewardMapper
 import com.rewardtodo.presentation.models.RewardView
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RewardAdapter @Inject constructor(
-    private val viewModel: RewardsViewModel,
-    private val userRepo: UserRepository
+    private val viewModel: RewardsViewModel
 ): RecyclerView.Adapter<RewardAdapter.ViewHolder>() {
 
     var items: List<RewardView> = mutableListOf()
-
-    private lateinit var user: User
-
-    init {
-        GlobalScope.launch {
-            user = userRepo.getUser()
-        }
-    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val rewardView = items[position]

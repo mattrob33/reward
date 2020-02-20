@@ -5,8 +5,11 @@
     <color name="colorPrimaryDarker">#2E7D32</color>
     <color name="colorAccent">@color/colorPrimary</color>
 
-    <color name="pointsColor">#EEF5B117</color>
+    <color name="pointsColor">#EDAF00</color>
+    <color name="pointsColorDark">#EDAF00</color>
+    <color name="pointsTextColor">#BB332500</color>
     <color name="pointsColorCompleted">#888888</color>
+    <color name="pointsTextColorCompleted">#FAFAFA</color>
 
     <color name="windowBackground">#FAFAFA</color>
     <color name="contentBackground">@color/windowBackground</color>
@@ -21,6 +24,8 @@
     <color name="listItem">#FAFAFA</color>
     <color name="listItemSelected">#C8E6C9</color>
 
-    <color name="emptyViewBackground">#EEEEEE</color>
+    <color name="emptyViewBackground">@color/contentBackground</color>
+    <color name="emptyViewAccent">@color/colorPrimary</color>
+    <color name="emptyViewAccentDark">@color/colorPrimaryDark</color>
     <color name="focusCircle">#FFFFFF</color>
 </resources>

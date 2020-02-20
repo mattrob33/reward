@@ -2,6 +2,7 @@ package com.rewardtodo.di.module
 
 import android.app.Application
 import android.content.Context
+import com.rewardtodo.cache.PreferencesHelper
 import com.rewardtodo.cache.db.RewardDao
 import com.rewardtodo.cache.db.RewardDb
 import com.rewardtodo.cache.db.TodoItemDao
@@ -13,6 +14,7 @@ import com.rewardtodo.data.repo.RewardRepository
 import com.rewardtodo.data.repo.TodoRepository
 import com.rewardtodo.data.repo.UserRepository
 import com.rewardtodo.di.scopes.ApplicationScope
+import com.rewardtodo.global.UserManager
 import dagger.Module
 import dagger.Provides
 
@@ -58,4 +60,12 @@ open class ApplicationModule {
     @Provides
     @ApplicationScope
     fun provideUserDao() = RewardDb.getInstance().userDao()
+
+    @Provides
+    @ApplicationScope
+    fun providePreferencesHelper(context: Context) = PreferencesHelper(context)
+
+    @Provides
+    @ApplicationScope
+    fun provideUserManager(userRepo: UserRepository, prefs: PreferencesHelper) = UserManager(userRepo, prefs)
 }

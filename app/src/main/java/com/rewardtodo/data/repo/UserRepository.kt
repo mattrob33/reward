@@ -2,38 +2,33 @@ package com.rewardtodo.data.repo
 
 import com.rewardtodo.cache.repo.UserCacheRepository
 import com.rewardtodo.domain.User
-import kotlinx.coroutines.newSingleThreadContext
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
-class UserRepository @Inject constructor(private val cacheRepo: UserCacheRepository) {
+open class UserRepository @Inject constructor(private val cacheRepo: UserCacheRepository) {
 
     fun addUser(user: User) {
-        newSingleThreadContext("update_todo").use {
-            runBlocking {
-                cacheRepo.addUser(user)
-            }
+        GlobalScope.launch(Dispatchers.IO) {
+            cacheRepo.addUser(user)
         }
     }
 
     fun deleteUser(user: User) {
-        newSingleThreadContext("update_todo").use {
-            runBlocking {
-                cacheRepo.deleteUser(user)
-            }
+        GlobalScope.launch(Dispatchers.IO) {
+            cacheRepo.deleteUser(user)
         }
     }
 
     fun updateUser(user: User) {
-        newSingleThreadContext("update_todo").use {
-            runBlocking {
-                cacheRepo.updateUser(user)
-            }
+        GlobalScope.launch(Dispatchers.IO) {
+            cacheRepo.updateUser(user)
         }
     }
 
-    suspend fun getUser() = cacheRepo.getUser()
+    suspend fun getUser(id: String) = cacheRepo.getUser(id)
 
-    fun getUserFlow() = cacheRepo.getUserFlow()
+    fun getUserFlow(id: String) = cacheRepo.getUserFlow(id)
+
+    fun getUserListFlow() = cacheRepo.getUserListFlow()
 
 }

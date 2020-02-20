@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="windowBackground">#000000</color>
-    <color name="contentBackground">#070707</color>
+    <color name="windowBackground">#2D2D2D</color>
+    <color name="contentBackground">#1A1A1A</color>
     <color name="toolbarBackground">@color/windowBackground</color>
 
     <color name="textColor">#FAFAFA</color>
     <color name="rewardImageColor">#EEEEEE</color>
 
     <color name="listItem">@color/contentBackground</color>
-    <color name="listItemSelected">#C8E6C9</color>
+    <color name="listItemSelected">#442E7D32</color>
 
-    <color name="emptyViewBackground">#222222</color>
+    <color name="emptyViewBackground">@color/contentBackground</color>
+    <color name="emptyViewAccent">#CCCCCC</color>
+    <color name="emptyViewAccentDark">@color/emptyViewAccent</color>
     <color name="focusCircle">#333333</color>
 </resources>

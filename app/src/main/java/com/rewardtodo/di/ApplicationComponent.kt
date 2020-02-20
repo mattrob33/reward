@@ -1,7 +1,7 @@
 package com.rewardtodo.di
 
 import android.app.Application
-import com.rewardtodo.RewardApplication
+import com.rewardtodo.global.RewardApplication
 import com.rewardtodo.di.module.ActivityBindingModule
 import com.rewardtodo.di.module.ApplicationModule
 import com.rewardtodo.di.scopes.ApplicationScope

@@ -29,16 +29,17 @@
                 android:id="@+id/text_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/todo_list_title_background"
-                android:clickable="true"
-                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
                 android:paddingStart="8dp"
                 android:paddingTop="4dp"
                 android:paddingEnd="8dp"
                 android:paddingBottom="4dp"
-                android:text="@string/title_todo"
-                android:textColor="@color/toolbarBackground"
-                android:textSize="18sp"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/lato_bold"
+                android:text="My Todo List"
+                android:textColor="@color/textColor"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -52,14 +53,89 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="8dp"
-        android:foregroundTint="#FFFFFF"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/todolist_toolbar"
         tools:itemCount="8"
         tools:listitem="@layout/todo_item"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/todolist_add_item_row"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/toolbarBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="24dp"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/todolist_add_item_row_top_border"
+            android:layout_width="0dp"
+            android:layout_height="0px"
+            android:background="#CCCCCC"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/button_add_item_points"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginStart="12dp"
+            style="@style/PointsView"
+            android:textSize="16sp"
+            android:text="1"
+            android:minEms="2"
+            app:layout_constraintTop_toBottomOf="@id/todolist_add_item_row_top_border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/edit_text_add_item_title"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/add_todo_item_text_background"
+            android:hint="Add item"
+            android:inputType="textCapSentences"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textColor="@color/textColor"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/todolist_add_item_row_top_border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/button_add_item_points"
+            app:layout_constraintEnd_toStartOf="@+id/button_add_item" />
+
+        <ImageView
+            android:id="@+id/button_add_item"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/add_item_button"
+            android:padding="4dp"
+            android:rotation="90"
+            android:scaleType="fitCenter"
+            android:tint="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="@id/edit_text_add_item_title"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/edit_text_add_item_title"
+            app:srcCompat="?attr/homeAsUpIndicator" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/todolist_empty_view"
@@ -69,40 +145,30 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:paddingBottom="8dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/todolist_toolbar"
-        android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <ImageView
             android:id="@+id/image_empty_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/white_circle"
-            android:cropToPadding="true"
-            android:padding="20dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_todolist"
-            android:tint="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.4"
-            app:layout_constraintWidth_percent=".3" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/EmptyView.Icon"
+            app:srcCompat="@drawable/ic_todolist" />
 
         <TextView
             android:id="@+id/text_empty_view_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            style="@style/EmptyView.Title"
             android:text="Nothing To Do"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/image_empty_view" />
@@ -111,11 +177,8 @@
             android:id="@+id/text_empty_view_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Click + to add a new item"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14sp"
+            style="@style/EmptyView.Message"
+            android:text="Click + to add a task"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_empty_view_title" />

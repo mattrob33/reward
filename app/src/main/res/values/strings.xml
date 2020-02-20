@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Reward Todo</string>
 
-    <string name="title_todo">My Todo List</string>
+    <string name="title_todo">Todo</string>
     <string name="title_rewards">Rewards</string>
     <string name="title_settings">Settings</string>
 

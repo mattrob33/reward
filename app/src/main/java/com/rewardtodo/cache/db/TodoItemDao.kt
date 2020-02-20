@@ -16,6 +16,9 @@ interface TodoItemDao {
     @Delete
     suspend fun delete(vararg item: TodoItemEntity)
 
+    @Query("DELETE FROM $TODOS_TABLE WHERE `id` = :id")
+    suspend fun delete(id: String)
+
     @Query("SELECT * FROM $TODOS_TABLE WHERE `id` = :id LIMIT 1")
     fun getTodoItem(id: String): Flow<TodoItemEntity>
 

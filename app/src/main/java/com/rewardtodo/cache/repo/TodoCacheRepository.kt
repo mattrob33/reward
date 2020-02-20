@@ -17,6 +17,8 @@ class TodoCacheRepository @Inject constructor(private val todoItemDao: TodoItemD
 
     suspend fun deleteTodoItem(todo: TodoItem) = todoItemDao.delete( TodoItemMapper.mapToEntity(todo) )
 
+    suspend fun deleteTodoItem(id: String) = todoItemDao.delete(id)
+
     fun getAllTodoItems(): Flow<List<TodoItem>> = todoItemDao.getAllTodoItems().map { entityList ->
         entityList.map { entity ->
             TodoItemMapper.mapFromEntity(entity)

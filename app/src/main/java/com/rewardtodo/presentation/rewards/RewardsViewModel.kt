@@ -1,10 +1,14 @@
 package com.rewardtodo.presentation.rewards
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rewardtodo.data.repo.RewardRepository
 import com.rewardtodo.data.repo.UserRepository
 import com.rewardtodo.domain.Reward
 import com.rewardtodo.domain.User
+import com.rewardtodo.global.UserManager
 import com.rewardtodo.presentation.mapper.RewardMapper
 import com.rewardtodo.presentation.models.RewardView
 import com.rewardtodo.util.Event
@@ -15,6 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RewardsViewModel @Inject constructor(
+    private val userManager: UserManager,
     private val userRepo: UserRepository,
     private val rewardRepo: RewardRepository
 ) : ViewModel() {
@@ -22,7 +27,6 @@ class RewardsViewModel @Inject constructor(
     private var getTodoItemsJob: Job? = null
 
     private val _requestPurchase = MutableLiveData<Event<Reward>>()
-
     val onRequestPurchase: LiveData<Event<Reward>>
         get() = _requestPurchase
 
@@ -34,7 +38,7 @@ class RewardsViewModel @Inject constructor(
     }
     val pointsText: LiveData<String> = _pointsText
 
-    lateinit var user: User
+    var user = User()
 
     private val _points = MutableLiveData<Int>().apply {
         value = 0
@@ -43,12 +47,20 @@ class RewardsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            userRepo.getUserFlow().collect {
+            userManager.currentUser.collect {
                 user = it
-                _points.value = user.points
-                _pointsText.value = "${user.points}"
+                updateForUser()
             }
         }
+    }
+
+    private fun updateForUser() {
+        updatePoints()
+    }
+
+    private fun updatePoints() {
+        _points.value = user.points
+        _pointsText.value = "${user.points}"
     }
 
     fun createReward(reward: Reward) {

@@ -6,7 +6,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class TodoRepository @Inject constructor(private val cacheRepo: TodoCacheRepository) {
+open class TodoRepository @Inject constructor(private val cacheRepo: TodoCacheRepository) {
 
     fun addTodoItem(todo: TodoItem): Job {
         return GlobalScope.launch(Dispatchers.IO) {
@@ -23,6 +23,12 @@ class TodoRepository @Inject constructor(private val cacheRepo: TodoCacheReposit
     fun deleteTodoItem(todo: TodoItem) {
         GlobalScope.launch(Dispatchers.IO) {
             cacheRepo.deleteTodoItem(todo)
+        }
+    }
+
+    fun deleteTodoItem(id: String) {
+        GlobalScope.launch(Dispatchers.IO) {
+            cacheRepo.deleteTodoItem(id)
         }
     }
 

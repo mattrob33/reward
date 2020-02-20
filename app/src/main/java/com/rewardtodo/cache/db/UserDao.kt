@@ -19,11 +19,14 @@ interface UserDao {
     @Delete
     suspend fun delete(vararg user: UserEntity)
 
-    @Query("SELECT * FROM $USER_TABLE LIMIT 1")
-    suspend fun getUser(): UserEntity
+    @Query("SELECT * FROM $USER_TABLE WHERE `id` = :id LIMIT 1")
+    suspend fun getUser(id: String): UserEntity
 
-    @Query("SELECT * FROM $USER_TABLE LIMIT 1")
-    fun getUserFlow(): Flow<UserEntity>
+    @Query("SELECT * FROM $USER_TABLE WHERE `id` = :id")
+    fun getUserFlow(id: String): Flow<UserEntity>
+
+    @Query("SELECT * FROM $USER_TABLE")
+    fun getUserListFlow(): Flow<List<UserEntity>>
 
     @Query("SELECT COUNT(*) FROM $USER_TABLE")
     suspend fun numUsers(): Int

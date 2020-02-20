@@ -9,45 +9,41 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rewardtodo.R
-import com.rewardtodo.RewardApplication
-import com.rewardtodo.data.repo.TodoRepository
-import com.rewardtodo.data.repo.UserRepository
-import com.rewardtodo.domain.User
+import com.rewardtodo.global.RewardApplication
 import com.rewardtodo.presentation.mapper.TodoItemMapper
 import com.rewardtodo.presentation.models.TodoItemView
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TodolistAdapter @Inject constructor(
-    private val userRepo: UserRepository,
-    private val todosRepo: TodoRepository
-): ListAdapter<TodoItemView, RecyclerView.ViewHolder>(TodoItemDiffCallback()) {
-
-//    private var items: MutableList<TodoItemView> = mutableListOf()
-
-    private lateinit var user: User
-
-    init {
-        GlobalScope.launch {
-            user = userRepo.getUser()
-        }
-    }
-
-    private var isMultiselectMode = false
-    private var numMultiselectItems = 0
+    private val todolistViewModel: TodolistViewModel,
+    todolistFragment: TodolistFragment
+): ListAdapter<TodoItemView, RecyclerView.ViewHolder>(TodoItemDiffCallback()), LifecycleObserver {
 
     private val textColorNormal = ContextCompat.getColor(RewardApplication.context, R.color.textColor)
     private val textColorCompleted = Color.GRAY
 
     private val pointsBackgroundNormal = R.drawable.points_background
-    private val pointsTextColorNormal = ContextCompat.getColor(RewardApplication.context, R.color.textColor)
+    private val pointsTextColorNormal = ContextCompat.getColor(RewardApplication.context, R.color.pointsTextColor)
 
     private val pointsBackgroundCompleted = R.drawable.points_background_completed
-    private val pointsTextColorCompleted = Color.WHITE
+    private val pointsTextColorCompleted = ContextCompat.getColor(RewardApplication.context, R.color.pointsTextColorCompleted)
+
+    private var numSelectedItems = 0
+
+    init {
+        todolistViewModel.numItemsSelected.observe(todolistFragment.viewLifecycleOwner) {
+            numSelectedItems = it.peekContent()
+        }
+    }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         val todoItem = getItem(position)
@@ -67,24 +63,23 @@ class TodolistAdapter @Inject constructor(
 
         fun bind(todoItem: TodoItemView) {
             row.setOnLongClickListener {
-                isMultiselectMode = true
-                if (!row.isSelected)
-                    numMultiselectItems++
-                row.isSelected = true
+                if (!row.isSelected) {
+                    row.isSelected = true
+                    todolistViewModel.addItemToSelectedList(TodoItemMapper.mapFromView(todoItem))
+                }
+
                 return@setOnLongClickListener true
             }
 
             row.setOnClickListener {
-                if (isMultiselectMode) {
+                if (numSelectedItems > 0) {
                     if (!row.isSelected) {
-                        numMultiselectItems++
                         row.isSelected = true
+                        todolistViewModel.addItemToSelectedList(TodoItemMapper.mapFromView(todoItem))
                     }
                     else {
-                        numMultiselectItems--
                         row.isSelected = false
-                        if (numMultiselectItems == 0)
-                            isMultiselectMode = false
+                        todolistViewModel.removeItemFromSelectedList(TodoItemMapper.mapFromView(todoItem))
                     }
                 }
             }
@@ -94,21 +89,14 @@ class TodolistAdapter @Inject constructor(
             checkbox.setOnCheckedChangeListener(null)
             checkbox.isChecked = todoItem.done
             checkbox.setOnCheckedChangeListener { _, isChecked ->
+                todoItem.done = isChecked
                 val item = TodoItemMapper.mapFromView(todoItem)
-
-                item.done = isChecked
-                updateStyleForState(isChecked)
+                updateStyleForState(todoItem)
 
                 GlobalScope.launch {
                     delay(400) // allow time for the material checkbox animation to complete
-                    todosRepo.updateTodoItem(item)
+                    todolistViewModel.toggleItem(item)
                 }
-
-                user.points = if (isChecked)
-                    user.points + item.points
-                else
-                    user.points - item.points
-                userRepo.updateUser(user)
             }
 
             noteText.text = todoItem.note
@@ -120,41 +108,20 @@ class TodolistAdapter @Inject constructor(
 
             pointsText.text = "${todoItem.points}"
 
-            updateStyleForState(todoItem.done)
+            updateStyleForState(todoItem)
         }
 
-        private fun updateStyleForState(isChecked: Boolean) {
-            val textColor = if (isChecked) textColorCompleted else textColorNormal
+        private fun updateStyleForState(item: TodoItemView) {
+            val textColor = if (item.done) textColorCompleted else textColorNormal
 
-            val pointsBackground = if (isChecked) pointsBackgroundCompleted else pointsBackgroundNormal
-            val pointsTextColor = if (isChecked) pointsTextColorCompleted else pointsTextColorNormal
+            val pointsBackground = if (item.done) pointsBackgroundCompleted else pointsBackgroundNormal
+            val pointsTextColor = if (item.done) pointsTextColorCompleted else pointsTextColorNormal
 
-            row.setOnLongClickListener {
-                isMultiselectMode = true
-                if (!row.isSelected)
-                    numMultiselectItems++
-                row.isSelected = true
-                return@setOnLongClickListener true
-            }
-
-            row.setOnClickListener {
-                if (isMultiselectMode) {
-                    if (!row.isSelected) {
-                        numMultiselectItems++
-                        row.isSelected = true
-                    }
-                    else {
-                        numMultiselectItems--
-                        row.isSelected = false
-                        if (numMultiselectItems == 0)
-                            isMultiselectMode = false
-                    }
-                }
-            }
+            row.isSelected = todolistViewModel.selectedItems.contains(item.id)
 
             titleText.apply {
                 paintFlags =
-                    if (isChecked)
+                    if (item.done)
                         paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                     else
                         paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()

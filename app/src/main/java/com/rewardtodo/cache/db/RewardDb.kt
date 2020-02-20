@@ -3,7 +3,7 @@ package com.rewardtodo.cache.db
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.rewardtodo.RewardApplication
+import com.rewardtodo.global.RewardApplication
 import com.rewardtodo.cache.model.RewardEntity
 import com.rewardtodo.cache.model.TodoItemEntity
 import com.rewardtodo.cache.model.UserEntity
