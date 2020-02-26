@@ -13,7 +13,7 @@ open class UserManager @Inject constructor(
 ) {
     private var initUser = User(name = "Me") // used as a placeholder until actual flow is retrieved
 
-    var currentUser: Flow<User> = flow { initUser }
+    var currentUserFlow: Flow<User> = flow { initUser }
         private set
 
     var userListFlow = userRepo.getUserListFlow()
@@ -29,7 +29,7 @@ open class UserManager @Inject constructor(
     }
 
     private fun restartUserFlow(userId: String) {
-        currentUser = userRepo.getUserFlow(userId)
+        currentUserFlow = userRepo.getUserFlow(userId)
     }
 
     fun changeCurrentUser(userId: String) {

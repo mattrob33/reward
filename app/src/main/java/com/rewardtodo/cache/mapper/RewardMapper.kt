@@ -11,6 +11,7 @@ object RewardMapper: Mapper<RewardEntity, Reward> {
             type.imagePath,
             type.points,
             type.numPurchases,
+            type.userId,
             type.id
         )
     }
@@ -22,6 +23,7 @@ object RewardMapper: Mapper<RewardEntity, Reward> {
             type.imagePath,
             type.points,
             type.numPurchases,
+            type.userId,
             type.id
         )
     }

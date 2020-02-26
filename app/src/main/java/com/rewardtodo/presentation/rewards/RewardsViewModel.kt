@@ -51,7 +51,7 @@ class RewardsViewModel @Inject constructor(
 
     fun start() {
         viewModelScope.launch {
-            userManager.currentUser.collect {
+            userManager.currentUserFlow.collect {
                 user = it
                 updateForUser()
             }
@@ -60,6 +60,7 @@ class RewardsViewModel @Inject constructor(
 
     private fun updateForUser() {
         updatePoints()
+        getRewards()
     }
 
     private fun updatePoints() {
@@ -75,7 +76,7 @@ class RewardsViewModel @Inject constructor(
         getTodoItemsJob?.cancelIfActive()
 
         getTodoItemsJob = viewModelScope.launch {
-            rewardRepo.getAllRewards().collect { itemList ->
+            rewardRepo.getAllRewardsForUser(user.id).collect { itemList ->
                 _items.value = itemList.map { RewardMapper.mapToView(it) }.sortedBy { it.numPurchases }
             }
         }

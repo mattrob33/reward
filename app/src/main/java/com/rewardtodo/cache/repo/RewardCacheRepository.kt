@@ -15,7 +15,7 @@ class RewardCacheRepository @Inject constructor(private val rewardDao: RewardDao
 
     suspend fun deleteReward(reward: Reward) = rewardDao.delete( RewardMapper.mapToEntity(reward) )
 
-    fun getAllRewards(): Flow<List<Reward>> = rewardDao.getAllRewards().map { entityList ->
+    fun getAllRewardsForUser(userId: String): Flow<List<Reward>> = rewardDao.getAllRewardsForUser(userId).map { entityList ->
         entityList.map { entity ->
             RewardMapper.mapFromEntity(entity)
         }

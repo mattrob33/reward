@@ -8,5 +8,6 @@ data class RewardView (
     var imagePath: String,
     var points: Int = 1,
     var numPurchases: Int = 0,
+    var userId: String = "",
     var id: String = UUID.randomUUID().toString()
 )

@@ -56,14 +56,9 @@ class CreateRewardFragment : BaseFragment() {
             val title = reward_title.text.toString()
             val desc = reward_description.text.toString()
             val points = pointVals[reward_points_seekbar.value.toInt()]
-            viewModel.createReward(
-                Reward(
-                    title = title,
-                    description = desc,
-                    points = points,
-                    imagePath = ""
-                )
-            )
+
+            viewModel.createReward(title, desc, points)
+
             findNavController().navigateUp()
         }
 

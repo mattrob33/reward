@@ -46,7 +46,7 @@ class TodolistViewModel (
 
     init {
         viewModelScope.launch {
-            userManager.currentUser.collect {
+            userManager.currentUserFlow.collect {
                 user = it
                 updateForUser()
             }

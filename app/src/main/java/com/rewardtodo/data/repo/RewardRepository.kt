@@ -28,7 +28,7 @@ class RewardRepository @Inject constructor(private val cacheRepo: RewardCacheRep
         }
     }
 
-    fun getAllRewards(): Flow<List<Reward>> = cacheRepo.getAllRewards()
+    fun getAllRewardsForUser(userId: String): Flow<List<Reward>> = cacheRepo.getAllRewardsForUser(userId)
 
     fun getReward(id: String) = cacheRepo.getReward(id)
 

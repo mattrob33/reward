@@ -22,6 +22,6 @@ interface RewardDao {
     @Query("SELECT * FROM $REWARDS_TABLE WHERE `id` = :id LIMIT 1")
     fun getReward(id: String): Flow<RewardEntity>
 
-    @Query("SELECT * FROM $REWARDS_TABLE")
-    fun getAllRewards(): Flow<List<RewardEntity>>
+    @Query("SELECT * FROM $REWARDS_TABLE WHERE `userId` = :userId")
+    fun getAllRewardsForUser(userId: String): Flow<List<RewardEntity>>
 }
