@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.rewardtodo.cache.PreferencesHelper
 import com.rewardtodo.data.repo.TodoRepository
 import com.rewardtodo.data.repo.UserRepository
+import com.rewardtodo.global.UserManager
 import com.rewardtodo.presentation.factory.TodoFactory
 import com.rewardtodo.presentation.todolist.TodolistViewModel
 import kotlinx.coroutines.runBlocking
@@ -25,6 +26,7 @@ class TodolistViewModelTest {
 
     @Mock private lateinit var mockTodoRepo: TodoRepository
     @Mock private lateinit var mockUserRepo: UserRepository
+    @Mock private lateinit var mockUserManager: UserManager
 
     private lateinit var fakePrefs: PreferencesHelper
 
@@ -33,10 +35,8 @@ class TodolistViewModelTest {
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-
         fakePrefs = PreferencesHelper(ApplicationProvider.getApplicationContext())
-
-        testViewModel = TodolistViewModel(mockUserRepo, mockTodoRepo, fakePrefs)
+        testViewModel = TodolistViewModel(mockUserManager, mockUserRepo, mockTodoRepo, fakePrefs)
     }
 
     @Test

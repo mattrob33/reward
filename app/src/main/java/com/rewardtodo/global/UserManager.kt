@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class UserManager @Inject constructor(
+open class UserManager @Inject constructor(
     private val userRepo: UserRepository,
     private val prefs: PreferencesHelper
 ) {

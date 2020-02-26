@@ -9,7 +9,6 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -26,7 +25,7 @@ import javax.inject.Inject
 class TodolistAdapter @Inject constructor(
     private val todolistViewModel: TodolistViewModel,
     todolistFragment: TodolistFragment
-): ListAdapter<TodoItemView, RecyclerView.ViewHolder>(TodoItemDiffCallback()), LifecycleObserver {
+): ListAdapter<TodoItemView, RecyclerView.ViewHolder>(TodoItemDiffCallback()) {
 
     private val textColorNormal = ContextCompat.getColor(RewardApplication.context, R.color.textColor)
     private val textColorCompleted = Color.GRAY
@@ -89,8 +88,8 @@ class TodolistAdapter @Inject constructor(
             checkbox.setOnCheckedChangeListener(null)
             checkbox.isChecked = todoItem.done
             checkbox.setOnCheckedChangeListener { _, isChecked ->
-                todoItem.done = isChecked
                 val item = TodoItemMapper.mapFromView(todoItem)
+                todoItem.done = isChecked
                 updateStyleForState(todoItem)
 
                 GlobalScope.launch {
