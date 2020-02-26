@@ -1,15 +1,19 @@
 package com.rewardtodo.presentation.settings
 
+import android.graphics.*
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rewardtodo.R
+import com.rewardtodo.global.RewardApplication
 import com.rewardtodo.presentation.models.UserView
 import javax.inject.Inject
 
@@ -29,11 +33,28 @@ class UserListAdapter @Inject constructor(
             return@setOnLongClickListener true
         }
 
+        val color: Int
+
         // TODO : this logic should be at model & viewmodel layer
-        if (userView.id == SettingsViewModel.ADD_USER_OPTION)
+        if (userView.id == SettingsViewModel.ADD_USER_OPTION) {
+            color = Color.GRAY
             holder.image.setImageResource(R.drawable.ic_add)
-        else
+        }
+        else {
+            color = ContextCompat.getColor(RewardApplication.context, R.color.textColor)
             holder.image.setImageResource(R.drawable.ic_person)
+        }
+
+        holder.name.setTextColor(color)
+
+        if (Build.VERSION.SDK_INT >= 29) {
+            holder.image.colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
+            holder.image.background.colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
+        }
+        else {
+            holder.image.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+            holder.image.background.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+        }
 
         holder.name.text = userView.name
     }
