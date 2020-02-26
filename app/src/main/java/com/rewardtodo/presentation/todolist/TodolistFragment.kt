@@ -146,7 +146,7 @@ class TodolistFragment : BaseFragment() {
             showKeyboard(requireContext(), edit_text_add_item_title)
         }
 
-        KeyboardVisibilityEvent.setEventListener(activity!!, object : KeyboardVisibilityEventListener {
+        KeyboardVisibilityEvent.setEventListener(activity!!, viewLifecycleOwner, object : KeyboardVisibilityEventListener {
             override fun onVisibilityChanged(isOpen: Boolean) {
                 activity?.let {
                     if (activity is MainActivity) {

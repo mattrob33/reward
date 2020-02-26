@@ -16,13 +16,18 @@ class UserCacheRepository @Inject constructor(private val userDao: UserDao) {
 
     suspend fun deleteUser(user: User) = userDao.delete( UserMapper.mapToEntity(user) )
 
+    suspend fun deleteUser(id: String) = userDao.delete(id)
+
     private suspend fun hasAddedUser(): Boolean {
         return userDao.numUsers() > 0
     }
 
     suspend fun getUser(id: String): User {
         if (hasAddedUser()) {
-            return UserMapper.mapFromEntity( userDao.getUser(id) )
+            val existingUser = userDao.getUser(id)
+            existingUser?.let {
+                return UserMapper.mapFromEntity(existingUser)
+            }
         }
         val newUser = User(name = "My Name")
         userDao.insert( UserMapper.mapToEntity(newUser) )
@@ -30,12 +35,18 @@ class UserCacheRepository @Inject constructor(private val userDao: UserDao) {
     }
 
     fun getUserFlow(id: String): Flow<User> = userDao.getUserFlow(id).map { userEntity ->
-        UserMapper.mapFromEntity(userEntity)
+        if (userEntity != null)
+            UserMapper.mapFromEntity(userEntity)
+        else
+            User()
     }
 
     fun getUserListFlow(): Flow<List<User>> = userDao.getUserListFlow().map { entityList ->
-        entityList.map { entity ->
-            UserMapper.mapFromEntity(entity)
+        entityList.map { userEntity ->
+            if (userEntity != null)
+                UserMapper.mapFromEntity(userEntity)
+            else
+                User()
         }
     }
 

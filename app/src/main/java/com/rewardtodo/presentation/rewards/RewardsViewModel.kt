@@ -46,6 +46,10 @@ class RewardsViewModel @Inject constructor(
     val points: LiveData<Int> = _points
 
     init {
+        start()
+    }
+
+    fun start() {
         viewModelScope.launch {
             userManager.currentUser.collect {
                 user = it

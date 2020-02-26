@@ -19,6 +19,9 @@ interface UserDao {
     @Delete
     suspend fun delete(vararg user: UserEntity)
 
+    @Query("DELETE FROM $USER_TABLE WHERE `id` = :id")
+    suspend fun delete(id: String)
+
     @Query("SELECT * FROM $USER_TABLE WHERE `id` = :id LIMIT 1")
     suspend fun getUser(id: String): UserEntity
 

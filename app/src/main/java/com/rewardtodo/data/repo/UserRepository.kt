@@ -19,6 +19,12 @@ open class UserRepository @Inject constructor(private val cacheRepo: UserCacheRe
         }
     }
 
+    fun deleteUser(id: String) {
+        GlobalScope.launch(Dispatchers.IO) {
+            cacheRepo.deleteUser(id)
+        }
+    }
+
     fun updateUser(user: User) {
         GlobalScope.launch(Dispatchers.IO) {
             cacheRepo.updateUser(user)

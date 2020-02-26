@@ -44,8 +44,11 @@ class RewardsFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         setupView()
+    }
+
+    override fun onResume() {
+        super.onResume()
         observeViewModel()
         start()
     }
@@ -105,6 +108,7 @@ class RewardsFragment : BaseFragment() {
 
     private fun start() {
         viewModel.getRewards()
+        viewModel.start()
     }
 
     private fun showRewardPurchasedMessage(reward: Reward) {
