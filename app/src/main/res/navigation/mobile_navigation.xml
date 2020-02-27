@@ -16,9 +16,11 @@
         android:name="com.rewardtodo.presentation.rewards.RewardsFragment"
         android:label="@string/title_rewards"
         tools:layout="@layout/fragment_rewards" >
+
         <action
-            android:id="@+id/action_navigation_rewards_to_navigation_create_reward"
+            android:id="@+id/action_create_reward"
             app:destination="@id/navigation_create_reward" />
+
     </fragment>
 
     <fragment
@@ -31,6 +33,14 @@
         android:id="@+id/navigation_create_reward"
         android:name="com.rewardtodo.presentation.createreward.CreateRewardFragment"
         android:label="Create Reward"
-        tools:layout="@layout/fragment_create_reward"/>
+        tools:layout="@layout/fragment_create_reward">
+
+        <argument
+            android:name="editRewardId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+
+    </fragment>
 
 </navigation>

@@ -21,8 +21,10 @@ class RewardCacheRepository @Inject constructor(private val rewardDao: RewardDao
         }
     }
 
-    fun getReward(id: String): Flow<Reward> = rewardDao.getReward(id).map {
-        RewardMapper.mapFromEntity(it)
+    fun getReward(id: String): Flow<Reward?> = rewardDao.getReward(id).map {
+        if (it == null)
+            null
+        else
+            RewardMapper.mapFromEntity(it)
     }
-
 }

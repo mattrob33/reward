@@ -20,7 +20,7 @@ interface RewardDao {
     suspend fun delete(vararg reward: RewardEntity)
 
     @Query("SELECT * FROM $REWARDS_TABLE WHERE `id` = :id LIMIT 1")
-    fun getReward(id: String): Flow<RewardEntity>
+    fun getReward(id: String): Flow<RewardEntity?>
 
     @Query("SELECT * FROM $REWARDS_TABLE WHERE `userId` = :userId")
     fun getAllRewardsForUser(userId: String): Flow<List<RewardEntity>>

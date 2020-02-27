@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.rewardtodo.R
 import com.rewardtodo.domain.Reward
+import com.rewardtodo.global.RewardApplication
 import com.rewardtodo.presentation.BaseFragment
 import com.rewardtodo.presentation.mapper.RewardIconMapper
 import dagger.android.support.AndroidSupportInjection
@@ -19,10 +21,7 @@ import javax.inject.Inject
 
 class CreateRewardFragment : BaseFragment() {
 
-    companion object {
-        fun newInstance() =
-            CreateRewardFragment()
-    }
+    private val args: CreateRewardFragmentArgs by navArgs()
 
     @Inject lateinit var viewModelFactory: CreateRewardViewModelFactory
 
@@ -39,6 +38,18 @@ class CreateRewardFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_create_reward, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val id: String? = args.editRewardId
+        if (id == null) {
+            viewModel.mode = CreateRewardViewModel.Mode.CREATE
+        }
+        else {
+            viewModel.mode = CreateRewardViewModel.Mode.EDIT
+            viewModel.setEditRewardId(id)
+        }
+
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupView()
@@ -46,8 +57,7 @@ class CreateRewardFragment : BaseFragment() {
     }
 
     private fun setupView() {
-        val iconAdapter =
-            RewardIconAdapter(viewModel)
+        val iconAdapter = RewardIconAdapter(viewModel)
         iconAdapter.items = viewModel.iconsList
         reward_icon_list_view.adapter = iconAdapter
         reward_icon_list_view.layoutManager = GridLayoutManager(requireContext(), 5, GridLayoutManager.VERTICAL, false)
@@ -71,7 +81,7 @@ class CreateRewardFragment : BaseFragment() {
             val points = viewModel.pointVals[reward_points_seekbar.value.toInt()]
             val icon = viewModel.icon.value?.peekContent() ?: Reward.Icon.STORE
 
-            viewModel.createReward(title, desc, points, icon)
+            viewModel.submitReward(title, desc, points, icon)
 
             findNavController().navigateUp()
         }
@@ -87,6 +97,23 @@ class CreateRewardFragment : BaseFragment() {
             val iconResId = RewardIconMapper.mapToView(icon)
             reward_icon.setImageResource(iconResId)
             reward_icon_list_view.visibility = View.GONE
+        }
+
+        viewModel.editReward.observe(viewLifecycleOwner) {
+            if (viewModel.mode == CreateRewardViewModel.Mode.EDIT) {
+                viewModel.onIconSelected(it.icon)
+
+                reward_title.setText(it.title)
+                reward_description.setText(it.description)
+
+                val pos = viewModel.pointVals.indexOf(it.points)
+                if (pos == -1)
+                    reward_points_seekbar.value = reward_points_seekbar.maximumValue
+                else
+                    reward_points_seekbar.value = pos.toFloat()
+
+                create_reward_button.text = RewardApplication.context.getString(R.string.save)
+            }
         }
     }
 

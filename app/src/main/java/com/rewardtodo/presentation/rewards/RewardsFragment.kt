@@ -2,8 +2,10 @@ package com.rewardtodo.presentation.rewards
 
 import android.content.Context
 import android.os.Bundle
-import android.view.*
-import android.widget.AdapterView
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -69,7 +71,9 @@ class RewardsFragment : BaseFragment() {
 
         return when (item.itemId) {
             R.id.menu_reward_edit -> {
-//                editNote(rewardItem)
+                val action = RewardsFragmentDirections.actionCreateReward()
+                action.editRewardId = rewardItem.id
+                findNavController().navigate(action)
                 true
             }
             R.id.menu_reward_delete -> {
@@ -90,7 +94,7 @@ class RewardsFragment : BaseFragment() {
         reward_list_view.adapter = itemsAdapter
 
         fab_create_reward.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_rewards_to_navigation_create_reward)
+            findNavController().navigate(R.id.action_create_reward)
         }
     }
 
