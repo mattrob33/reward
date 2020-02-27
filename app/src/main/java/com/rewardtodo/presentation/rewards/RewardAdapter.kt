@@ -5,6 +5,7 @@ import android.graphics.BlendModeColorFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Build
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,10 +23,14 @@ import com.rewardtodo.presentation.models.RewardView
 import javax.inject.Inject
 
 class RewardAdapter @Inject constructor(
-    private val viewModel: RewardsViewModel
+    private val viewModel: RewardsViewModel,
+    private val fragment: RewardsFragment
 ): RecyclerView.Adapter<RewardAdapter.ViewHolder>() {
 
     var items: List<RewardView> = mutableListOf()
+
+    var position: Int = -1
+        private set
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val rewardView = items[position]
@@ -33,6 +38,11 @@ class RewardAdapter @Inject constructor(
         holder.row.setOnClickListener {
             val reward = RewardMapper.mapFromView(rewardView)
             attemptRewardPurchase(reward)
+        }
+
+        holder.row.setOnLongClickListener {
+            this.position = position
+            return@setOnLongClickListener false
         }
 
         holder.image.setImageResource( RewardIconMapper.mapToView(rewardView.icon) )
@@ -70,12 +80,24 @@ class RewardAdapter @Inject constructor(
         viewModel.requestPurchase(reward)
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), View.OnCreateContextMenuListener {
         var row: ConstraintLayout = view.findViewById(R.id.reward_item_row)
         var image: ImageView = view.findViewById(R.id.image_reward)
         var titleText: TextView = view.findViewById(R.id.text_title)
         var descText: TextView = view.findViewById(R.id.text_desc)
         var pointsText: TextView = view.findViewById(R.id.text_points)
+
+
+        init {
+            view.setOnCreateContextMenuListener(this)
+        }
+
+
+        override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+            menu?.setHeaderTitle("Select The Action")
+            menu?.add(0, R.id.menu_reward_edit, 0, "Edit")
+            menu?.add(0, R.id.menu_reward_delete, 0, "Delete")
+        }
     }
 
 }

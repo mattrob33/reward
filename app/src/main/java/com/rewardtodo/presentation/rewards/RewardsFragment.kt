@@ -14,9 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.rewardtodo.R
+import com.rewardtodo.data.repo.RewardRepository
 import com.rewardtodo.data.repo.UserRepository
 import com.rewardtodo.domain.Reward
 import com.rewardtodo.presentation.BaseFragment
+import com.rewardtodo.presentation.mapper.RewardMapper
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_rewards.*
 import javax.inject.Inject
@@ -26,6 +28,7 @@ class RewardsFragment : BaseFragment() {
     private lateinit var itemsAdapter: RewardAdapter
     @Inject lateinit var viewModelFactory: RewardsViewModelFactory
 
+    @Inject lateinit var rewardRepo: RewardRepository
     @Inject lateinit var userRepo: UserRepository
 
     private val viewModel: RewardsViewModel by lazy {
@@ -41,6 +44,11 @@ class RewardsFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_rewards, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        registerForContextMenu(reward_list_view)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupView()
@@ -52,21 +60,20 @@ class RewardsFragment : BaseFragment() {
         start()
     }
 
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        val inflater: MenuInflater = activity!!.menuInflater
-        inflater.inflate(R.menu.reward_item_context_menu, menu)
-    }
-
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+        val rewardItemView = with (itemsAdapter) {
+            items[position]
+        }
+
+        val rewardItem = RewardMapper.mapFromView(rewardItemView)
+
         return when (item.itemId) {
             R.id.menu_reward_edit -> {
-//                editNote(info.id)
+//                editNote(rewardItem)
                 true
             }
             R.id.menu_reward_delete -> {
-//                deleteNote(info.id)
+                rewardRepo.deleteReward(rewardItem)
                 true
             }
             else -> super.onContextItemSelected(item)
@@ -76,7 +83,7 @@ class RewardsFragment : BaseFragment() {
     private fun setupView() {
         (activity!! as AppCompatActivity).setSupportActionBar(rewards_toolbar)
 
-        itemsAdapter = RewardAdapter(viewModel)
+        itemsAdapter = RewardAdapter(viewModel, this)
 
         reward_list_view.layoutManager = LinearLayoutManager(requireContext())
         reward_list_view.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
