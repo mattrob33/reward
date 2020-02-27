@@ -5,7 +5,8 @@
     <color name="toolbarBackground">@color/windowBackground</color>
 
     <color name="textColor">#FAFAFA</color>
-    <color name="rewardImageColor">#EEEEEE</color>
+    <color name="iconTintColor">#AAAAAA</color>
+    <color name="rewardImageColor">@color/iconTintColor</color>
 
     <color name="listItem">@color/contentBackground</color>
     <color name="listItemSelected">#442E7D32</color>

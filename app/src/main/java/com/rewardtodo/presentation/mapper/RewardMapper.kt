@@ -8,6 +8,7 @@ object RewardMapper: Mapper<RewardView, Reward> {
         return RewardView(
             type.title,
             type.description,
+            type.icon,
             type.imagePath,
             type.points,
             type.numPurchases,
@@ -20,6 +21,7 @@ object RewardMapper: Mapper<RewardView, Reward> {
         return Reward(
             type.title,
             type.description,
+            type.icon,
             type.imagePath,
             type.points,
             type.numPurchases,

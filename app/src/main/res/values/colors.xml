@@ -16,7 +16,8 @@
     <color name="toolbarBackground">@color/windowBackground</color>
 
     <color name="textColor">#0A0A0A</color>
-    <color name="rewardImageColor">@color/colorPrimaryDark</color>
+    <color name="iconTintColor">#222222</color>
+    <color name="rewardImageColor">@color/iconTintColor</color>
 
     <color name="todolistTitle">@color/colorPrimary</color>
     <color name="todolistTitlePressed">@color/colorPrimaryDark</color>

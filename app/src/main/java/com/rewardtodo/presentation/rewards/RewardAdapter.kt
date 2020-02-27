@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rewardtodo.R
 import com.rewardtodo.domain.Reward
 import com.rewardtodo.global.RewardApplication
+import com.rewardtodo.presentation.mapper.RewardIconMapper
 import com.rewardtodo.presentation.mapper.RewardMapper
 import com.rewardtodo.presentation.models.RewardView
 import javax.inject.Inject
@@ -34,7 +35,7 @@ class RewardAdapter @Inject constructor(
             attemptRewardPurchase(reward)
         }
 
-        holder.image.setImageResource(R.drawable.ic_tags)
+        holder.image.setImageResource( RewardIconMapper.mapToView(rewardView.icon) )
 
         val color = ContextCompat.getColor(RewardApplication.context, R.color.rewardImageColor)
         if (Build.VERSION.SDK_INT >= 29)

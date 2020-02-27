@@ -20,9 +20,26 @@
             android:layout_height="48dp"
             android:padding="10dp"
             android:src="@drawable/ic_close"
-            android:tint="#AAAAAA"
+            android:tint="@color/iconTintColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reward_icon_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:foregroundTint="#FFFFFF"
+            android:elevation="8dp"
+            android:background="@color/contentBackground"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:orientation="horizontal"
+            tools:itemCount="56"
+            tools:listitem="@layout/reward_icon_item" />
 
         <ImageView
             android:id="@+id/reward_icon"
@@ -31,6 +48,7 @@
             android:layout_marginBottom="16dp"
             android:padding="12dp"
             android:src="@drawable/ic_store"
+            android:tint="@color/iconTintColor"
             android:background="@drawable/ripple_circle_outline"
             android:clickable="true"
             android:focusable="true"

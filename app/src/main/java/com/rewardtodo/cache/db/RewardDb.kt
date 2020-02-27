@@ -3,12 +3,15 @@ package com.rewardtodo.cache.db
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.rewardtodo.cache.converters.RewardIconConverter
 import com.rewardtodo.global.RewardApplication
 import com.rewardtodo.cache.model.RewardEntity
 import com.rewardtodo.cache.model.TodoItemEntity
 import com.rewardtodo.cache.model.UserEntity
 
 @Database(entities = [UserEntity::class, TodoItemEntity::class, RewardEntity::class], version = 1, exportSchema = false)
+@TypeConverters(RewardIconConverter::class)
 abstract class RewardDb: RoomDatabase() {
 
     abstract fun userDao(): UserDao
