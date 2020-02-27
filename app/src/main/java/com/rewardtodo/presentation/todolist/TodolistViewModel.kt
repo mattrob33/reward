@@ -12,7 +12,6 @@ import com.rewardtodo.domain.User
 import com.rewardtodo.global.UserManager
 import com.rewardtodo.presentation.mapper.TodoItemMapper
 import com.rewardtodo.presentation.models.TodoItemView
-import com.rewardtodo.util.Event
 import com.rewardtodo.util.cancelIfActive
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
@@ -38,8 +37,8 @@ class TodolistViewModel (
 
     val selectedItems = mutableSetOf<String>()
 
-    private val _numItemsSelected = MutableLiveData<Event<Int>>()
-    val numItemsSelected: LiveData<Event<Int>>
+    private val _numItemsSelected = MutableLiveData<Int>(0)
+    val numItemsSelected: LiveData<Int>
         get() = _numItemsSelected
 
     var user = User()
@@ -93,13 +92,13 @@ class TodolistViewModel (
 
     fun addItemToSelectedList(todoItem: TodoItem) {
         selectedItems.add(todoItem.id)
-        _numItemsSelected.value = Event(selectedItems.size)
+        _numItemsSelected.value = selectedItems.size
     }
 
     fun removeItemFromSelectedList(todoItem: TodoItem) {
         selectedItems.remove(todoItem.id)
         if (selectedItems.isEmpty())
-            _numItemsSelected.value = Event(0)
+            _numItemsSelected.value = 0
     }
 
     fun deleteSelectedItems() {
@@ -107,7 +106,12 @@ class TodolistViewModel (
             todoRepo.deleteTodoItem(itemId)
 
         selectedItems.clear()
-        _numItemsSelected.value = Event(0)
+        _numItemsSelected.value = 0
+    }
+
+    fun clearSelectedItems() {
+        selectedItems.clear()
+        _numItemsSelected.value = 0
     }
 
     fun cycleNewItemPoints() {

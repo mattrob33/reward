@@ -4,5 +4,9 @@ import android.view.MotionEvent
 import androidx.fragment.app.Fragment
 
 open class BaseFragment: Fragment() {
+
     open fun dispatchTouchEvent(ev: MotionEvent?) {}
+
+    open fun onNavigateAway() {}
+
 }

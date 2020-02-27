@@ -1,4 +1,4 @@
-package com.rewardtodo.presentation.rewards
+package com.rewardtodo.presentation.createreward
 
 import android.view.LayoutInflater
 import android.view.View

@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/navigation_create_reward"
-        android:name="com.rewardtodo.presentation.rewards.CreateRewardFragment"
+        android:name="com.rewardtodo.presentation.createreward.CreateRewardFragment"
         android:label="Create Reward"
         tools:layout="@layout/fragment_create_reward"/>
 

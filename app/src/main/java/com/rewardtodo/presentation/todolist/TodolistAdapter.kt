@@ -40,7 +40,8 @@ class TodolistAdapter @Inject constructor(
 
     init {
         todolistViewModel.numItemsSelected.observe(todolistFragment.viewLifecycleOwner) {
-            numSelectedItems = it.peekContent()
+            numSelectedItems = it
+            notifyDataSetChanged()
         }
     }
 

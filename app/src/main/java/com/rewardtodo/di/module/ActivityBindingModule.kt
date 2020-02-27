@@ -1,7 +1,7 @@
 package com.rewardtodo.di.module
 
 import com.rewardtodo.di.scopes.FragmentScope
-import com.rewardtodo.presentation.rewards.CreateRewardFragment
+import com.rewardtodo.presentation.createreward.CreateRewardFragment
 import com.rewardtodo.presentation.rewards.RewardsFragment
 import com.rewardtodo.presentation.settings.SettingsFragment
 import com.rewardtodo.presentation.todolist.TodolistFragment

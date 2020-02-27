@@ -7,4 +7,6 @@
 
     <string name="hide_done">Hide completed tasks</string>
     <string name="delete_selected">Delete selected tasks</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

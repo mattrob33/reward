@@ -5,6 +5,8 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,10 +33,40 @@ class TodolistFragment : BaseFragment() {
     @Inject lateinit var userRepo: UserRepository
     @Inject lateinit var todosRepo: TodoRepository
 
-    private var optionsMenu: Menu? = null
-
     private val viewModel: TodolistViewModel by lazy {
         ViewModelProvider(activity!!, viewModelFactory)[TodolistViewModel::class.java]
+    }
+
+    private var actionMode: ActionMode? = null
+
+    private val actionModeCallback = object : ActionMode.Callback {
+        override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+            val inflater: MenuInflater = mode.menuInflater
+            inflater.inflate(R.menu.todolist_action_mode_menu, menu)
+            return true
+        }
+
+        override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+            val iconColor = ContextCompat.getColor(requireContext(), R.color.iconTintColor)
+            menu.findItem(R.id.menu_delete)!!.icon!!.setTint(iconColor)
+            return true
+        }
+
+        override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+            return when (item.itemId) {
+                R.id.menu_delete -> {
+                    viewModel.deleteSelectedItems()
+                    mode.finish()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        override fun onDestroyActionMode(mode: ActionMode) {
+            viewModel.clearSelectedItems()
+            actionMode = null
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -56,40 +88,23 @@ class TodolistFragment : BaseFragment() {
         start()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        menu.clear()
-        inflater.inflate(R.menu.todolist_menu, menu)
-        optionsMenu = menu
+    override fun onNavigateAway() {
+        actionMode?.finish()
+        actionMode = null
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.menu_hide_done).isVisible = true
-
-        val numItemsSelected = viewModel.numItemsSelected.value?.peekContent()
-        numItemsSelected?.let {
-            if (numItemsSelected > 0) {
-                menu.findItem(R.id.menu_hide_done).isVisible = false
-                menu.findItem(R.id.menu_delete).isVisible = true
-            }
-            else {
-                menu.findItem(R.id.menu_hide_done).isVisible = true
-                menu.findItem(R.id.menu_delete).isVisible = false
-            }
-        }
-
-        super.onPrepareOptionsMenu(menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.todolist_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.menu_hide_done -> viewModel.toggleHideCompletedItems()
-            R.id.menu_delete -> {
-                viewModel.deleteSelectedItems()
-                item.isVisible = false
-                optionsMenu?.findItem(R.id.menu_hide_done)?.isVisible = true
+        return when(item.itemId) {
+            R.id.menu_hide_done -> {
+                viewModel.toggleHideCompletedItems()
+                true
             }
+            else -> false
         }
-        return true
     }
 
     /**
@@ -179,16 +194,17 @@ class TodolistFragment : BaseFragment() {
             }
         }
 
-        viewModel.numItemsSelected.observe(viewLifecycleOwner) {
-            val numItemsSelected = it.peekContent()
+        viewModel.numItemsSelected.observe(viewLifecycleOwner) { numItemsSelected ->
             if (numItemsSelected > 0) {
-                optionsMenu?.findItem(R.id.menu_hide_done)?.isVisible = false
-                optionsMenu?.findItem(R.id.menu_delete)?.isVisible = true
+                if (actionMode == null) {
+                    actionMode = (activity as AppCompatActivity).startSupportActionMode(actionModeCallback)
+                }
             }
             else {
-                optionsMenu?.findItem(R.id.menu_hide_done)?.isVisible = true
-                optionsMenu?.findItem(R.id.menu_delete)?.isVisible = false
+                actionMode?.finish()
             }
+
+
         }
 
         viewModel.newItemPoints.observe(viewLifecycleOwner) {

@@ -2,9 +2,8 @@ package com.rewardtodo.presentation.rewards
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -51,6 +50,27 @@ class RewardsFragment : BaseFragment() {
         super.onResume()
         observeViewModel()
         start()
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        val inflater: MenuInflater = activity!!.menuInflater
+        inflater.inflate(R.menu.reward_item_context_menu, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        val info = item.menuInfo as AdapterView.AdapterContextMenuInfo
+        return when (item.itemId) {
+            R.id.menu_reward_edit -> {
+//                editNote(info.id)
+                true
+            }
+            R.id.menu_reward_delete -> {
+//                deleteNote(info.id)
+                true
+            }
+            else -> super.onContextItemSelected(item)
+        }
     }
 
     private fun setupView() {

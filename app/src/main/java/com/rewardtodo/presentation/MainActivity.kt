@@ -26,17 +26,21 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_todolist, R.id.navigation_rewards, R.id.navigation_settings -> showBottomNavBar()
                 else -> hideBottomNavBar()
             }
+            getCurrentFragment()?.onNavigateAway()
         }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-
-        nav_host_fragment?.childFragmentManager?.let {
-            val currentFragment: Fragment = nav_host_fragment.childFragmentManager.fragments[0]
-            (currentFragment as BaseFragment).dispatchTouchEvent(ev)
-        }
-
+        getCurrentFragment()?.dispatchTouchEvent(ev)
         return super.dispatchTouchEvent(ev)
+    }
+
+    private fun getCurrentFragment(): BaseFragment? {
+        nav_host_fragment?.childFragmentManager?.let {
+            if (nav_host_fragment.childFragmentManager.fragments.isNotEmpty())
+                return nav_host_fragment.childFragmentManager.fragments[0] as BaseFragment
+        }
+        return null
     }
 
     fun showBottomNavBar() {

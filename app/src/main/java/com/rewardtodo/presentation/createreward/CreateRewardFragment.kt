@@ -1,4 +1,4 @@
-package com.rewardtodo.presentation.rewards
+package com.rewardtodo.presentation.createreward
 
 import android.content.Context
 import android.os.Bundle
@@ -20,7 +20,8 @@ import javax.inject.Inject
 class CreateRewardFragment : BaseFragment() {
 
     companion object {
-        fun newInstance() = CreateRewardFragment()
+        fun newInstance() =
+            CreateRewardFragment()
     }
 
     @Inject lateinit var viewModelFactory: CreateRewardViewModelFactory
@@ -45,7 +46,8 @@ class CreateRewardFragment : BaseFragment() {
     }
 
     private fun setupView() {
-        val iconAdapter = RewardIconAdapter(viewModel)
+        val iconAdapter =
+            RewardIconAdapter(viewModel)
         iconAdapter.items = viewModel.iconsList
         reward_icon_list_view.adapter = iconAdapter
         reward_icon_list_view.layoutManager = GridLayoutManager(requireContext(), 5, GridLayoutManager.VERTICAL, false)

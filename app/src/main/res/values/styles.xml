@@ -7,10 +7,16 @@
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+        <item name="actionModeStyle">@style/BaseTheme.ActionMode</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="BaseTheme.ActionMode" parent="Widget.AppCompat.ActionMode">
+        <item name="background">@color/toolbarBackground</item>
     </style>
 
     <style name="AppTheme" parent="BaseTheme" />
-
 
     <style name="PointsView" parent="Widget.MaterialComponents.TextView">
         <item name="android:background">@drawable/points_background</item>
