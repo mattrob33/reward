@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rewardtodo.R
 import com.rewardtodo.global.RewardApplication
 import com.rewardtodo.presentation.models.UserView
+import com.rewardtodo.presentation.settings.SettingsViewModel.SettingsMode
 import javax.inject.Inject
 
 class UserListAdapter @Inject constructor(
@@ -41,8 +42,14 @@ class UserListAdapter @Inject constructor(
             holder.image.setImageResource(R.drawable.ic_add)
         }
         else {
-            color = ContextCompat.getColor(RewardApplication.context, R.color.textColor)
-            holder.image.setImageResource(R.drawable.ic_person)
+            if (viewModel.settingsMode.value == SettingsMode.MANAGE_PROFILES) {
+                color = Color.GRAY
+                holder.image.setImageResource(R.drawable.ic_pencil)
+            }
+            else {
+                color = ContextCompat.getColor(RewardApplication.context, R.color.textColor)
+                holder.image.setImageResource(R.drawable.ic_person)
+            }
         }
 
         holder.name.setTextColor(color)

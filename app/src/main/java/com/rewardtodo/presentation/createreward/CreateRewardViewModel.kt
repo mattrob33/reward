@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.rewardtodo.cache.PreferencesHelper
 import com.rewardtodo.data.repo.RewardRepository
 import com.rewardtodo.domain.Reward
-import com.rewardtodo.global.UserManager
 import com.rewardtodo.util.Event
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
